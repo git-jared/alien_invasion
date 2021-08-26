@@ -1,4 +1,5 @@
 import sys
+import json
 from time import sleep
 
 import pygame
@@ -42,6 +43,8 @@ class AlienInvasion:
         # Make the Play button.
         self.play_button = Button(self, "Play")
 
+        
+
     def run_game(self):
         """Start the main loop for the game."""
         while True:
@@ -59,6 +62,8 @@ class AlienInvasion:
         """ Respond to keypresses and mouse events."""
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                with open (self.stats.filename, 'w') as f:
+                    json.dump(self.stats.high_score, f)
                 sys.exit()
             elif event.type == pygame.KEYDOWN:
                 self._check_keydown_events(event)
@@ -101,6 +106,9 @@ class AlienInvasion:
             #Move the ship to the left.
             self.ship.moving_left = True
         elif event.key == pygame.K_q:
+            #Store the high score in filename before quiting.
+            with open (self.stats.filename, 'w') as f:
+                json.dump(self.stats.high_score, f)
             sys.exit()
         elif event.key == pygame.K_SPACE:
             self._fire_bullet()
